@@ -1,0 +1,306 @@
+Dump data from UART
+  stty -F /dev/ttyO4 raw
+  stty -F /dev/ttyO4 460800
+  hexdump -C /dev/ttyO4
+
+Virtual com ports on Linux:
+1.
+  sudo socat PTY,link=/dev/ttyS10 PTY,link=/dev/ttyS11
+  sudo minicom -D /dev/ttyS10
+  sudo minicom -D /dev/ttyS11
+2.
+  socat -d -d pty,raw,echo=0 pty,raw,echo=0
+  cat < /dev/pts/7
+  echo "Test" > /dev/pts/10
+  
+Ramdisk:
+mkdir /mnt/ramdisk
+mount -t tmpfs -o size=512m tmpfs /mnt/ramdisk
+
+MongoDB:
+use bcs
+db.bwcConnections.find()
+db.bwcConnections.remove({"emcId" : "8wmjn6owKQ7sqxcSY"})
+
+
+
+- Display RAM info:
+sudo dmidecode --type 17
+
+- List process' connections
+sudo netstat -taucp | grep <pid or process name>
+
+- Print TCP packets
+sudo tcpdump -vv -i lo -X -s 0 port 9000
+
+- Find all 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 in all files in subdirectories.
+for f in ./**/*.dat ;  do hexdump -e '16/1 " %02X" "\n"' "$f" | grep  -n "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00" ;  done
+May need to call this before: shopt -s globstar
+
+- Conver hex to dec:
+echo 0x10 $((0x10))
+
+- Execute dd command on each .dat file in directory:
+for i in *.dat; do dd  bs=16 if="$i" of=/dev/null; done 
+
+- Check DNS status
+systemd-resolve --status
+host google.com
+
+- Add  group and other privilage to rw a folder and all files in it:
+chmod -R og+rw foldername
+
+- debug crossabr
+python -m pdb /usr/local/bin/crossbar start --cbdir=/home/debian/bes/emc/crossbar/.crossbar
+
+- Use gdbserver
+TARGET> sudo gdbserver --attach :2001 PID
+HOST> gdb-multiarch ./bin/emcd
+(gdb) target remote emc-demo-wip.local:2001
+
+
+- Attach strace to existing process and monitor /dev/ttyUSB0 rw 
+strace -e trace=readv,writev -p PID
+
+
+- Change the console settings
+stty rows 200 columns 220
+
+- Run gdb - wit gdbserver
+
+ -ex "target remote arm-demo.local:1234" \
+  -ex "file path/to/cross/compiled/executable" \
+  -ex 'tb main' \
+  -ex c
+
+- Resolve addresses of all avahi hosts:
+nmap  -sP 192.168.2.0/24 | grep -oh -e '192.168.2.*'  | xargs  avahi-resolve-address
+grep -oh -e '192.168.2.*' filename  | xargs  avahi-resolve-address
+
+- Execute touch on multiple files found using find command with *searchfor* pattern
+find *searchfor* -print0 | xargs -0 touch
+
+- clang
+scan-build --use-c++=/usr/bin/clang --use-analyzer=/usr/bin/clang -o /tmp/myhtmldir -plist-html --view make -j8
+ or 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ --analyze -Xanalyzer -analyzer-checker=alpha.cplusplus")
+
+
+- Append 24 '\0' chaacter at the end of a file
+dd if=/dev/zero bs=1 count=24 >> file
+
+- Interesujace flagi gcc
+diff --git a/emc/CMakeLists.txt b/emc/CMakeLists.txt
+index 4530dcb..ae75786 100644
+--- a/emc/CMakeLists.txt
++++ b/emc/CMakeLists.txt
+@@ -107,8 +107,16 @@ add_definitions(-DSHDB_COMPILED_LIB)
+ add_definitions(-DCPPWAMP_COMPILED_LIB)
+ add_definitions(-DBOOST_COROUTINE_NO_DEPRECATION_WARNING)
+ 
+-#Add common compiler flags
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
++# Add common compiler flags
++# -w
++# -Wextra -pedantic -Wconversion
++# -fsanitize=address
++# -fsanitize=address -fno-omit-frame-pointer
++# -fsanitize=leak
++# -fsanitize=thread
++# -fsanitize=undefined
++# -fsanitize-recover=address
++# -Wl,-Map=main.map
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wl,-Map=main.map")
+
+
+
+- Lind the latest file
+time find . -type f -printf '%T@ %P\n' | sort -n | tail -n1
+
+- Monitor files/directories (recursive) access (e.g. writes).
+inotifywatch -v -e access -e modify -t 60 -r .
+
+- Check which files process is using:
+ lsof -n -p PID
+
+- Get PID of process acessing a given file 
+lsof -n -t file
+
+
+- Run cppcheck static analyse
+cppcheck --std=c++11 --enable=all --inconclusive -I ./libcons/include -I ./libcore/include -I ./libcppwamp/include -I ./libdate/include -I ./libemc/include -I ./libentity/include -I ./libiochan/include -I ./librapidha/include -I ./libshdb/include -I ./libzigbee/include     -I ./emc-test/include  -I ../ext/cppwamp/cppwamp/include -I ../ext/Catch/include -I ../ext/date/date -I ../ext/boost/include . 
+
+
+cppcheck --std=c++11 --enable=all --inconclusive -v .
+cppcheck --std=c++11 --enable=all --inconclusive -v  --enable=all -I ../libemc/include . --check-config
+cppcheck --std=c++11 --enable=all --inconclusive -v  --enable=all -I ./libemc/include -I ./libcore/include  -I ./libcons/include  -I ./libentity/include -I ./libshdb/include  -I ./emc-test/include  -I ../ext/cppwamp/cppwamp/include -I ../ext/Catch/include -I ../ext/date/date -I ../ext/boost/include   . --check-config
+cppcheck --std=c++11 --enable=all --inconclusive -I ./libemc/include -I ./libcore/include  -I ./libcons/include  -I ./libentity/include -I ./libshdb/include  -I ./emc-test/include  -I ../ext/cppwamp/cppwamp/include -I ../ext/Catch/include -I ../ext/date/date -I ../ext/boost/include . 
+
+cppcheck --std=c++11 --enable=all --inconclusive -I ../libemc/include -I ../libcore/include  -I ../libcons/include  -I ../libentity/include -I ../libshdb/include  -I ../emc-test/include  -I ../ext/cppwamp/cppwamp/include -I ../ext/Catch/include -I ../ext/date/date -I ../ext/boost/include . 
+
+cppcheck --std=c++11 --enable=all --inconclusive -I ./include  -I ../libemc/include -I ../libcore/include  -I ../libcons/include  -I ../libentity/include -I ../libshdb/include  -I ../emc-test/include  -I ../../ext/cppwamp/cppwamp/include -I ../../ext/Catch/include -I ../../ext/date/date -I ../../ext/boost/include . 
+
+- Rule repo with mame only - can be used as a template.
+on the GIT: daf64abde8d9529047c2bf3c0e62f6d777d2a6f6
+
+- Hexdup with specific format e.g. 24 bytes in a line
+hexdump -e '24/1 "%02X" "\n"' <file>
+
+- Find files and execute some command on them
+e.g. find all html files and open them in firefox
+find -name *html*  -exec firefox {} \+
+e.g. Find all html files and copy them to  ~/proj/workspace/emc-x-gcc-all/clang-sa/
+find -name *htm*  -exec cp '{}' ~/proj/workspace/emc-x-gcc-all/clang-sa/  \;
+
+- Find multiple blank lines
+pcregrep  -n -r -M $'\n\n\n' .
+pcregrep  -n -r -M $'\n\n\n' . | grep sche
+
+- Update accecc/modification time of each file i directory tree
+find  -type f  -exec touch {} +
+
+- Calculate current seconds since midnight
+date "+(%H*60+%M)*60+%S" | bc
+
+- Find for auto by value
+grep --include \*.cpp --include \*.hpp -Hrn -i -E 'auto' . | grep for | grep -v '&'
+
+- Replace in all files (including subdirectories) scheduleRepo_ with scheduler_
+find . -type f -exec sed -i 's/scheduleRepo_/scheduler_/g' {} +
+
+- To enable MOCK_IO 
+nano /home/john/proj/workspace/emc-curves-gcc-all/emc/build-arm/emc/src/emc-build/CMakeCache.txt
+Set HW_USING_IOB:BOOL=OFF
+
+- Close crossbar
+kill SIGINT $(ps -A | grep crossbar-contro | grep -o -E '^[0-9]+')
+kill SIGINT $(ps -A | grep crossbar-contro | grep -o -E ' [0-9]+ ')
+ - Count lines of code:
+find . -name '*.?h?' | xargs wc -l    
+
+- Find occurences of bundle (, BUNDLE, Bundle,  etc - case insensive) in all files and subdirectories of current directory. 
+grep -Hrn -i -P 'bundle' .
+grep -Hrn -i -P 'bundle' . | grep -i trend - then check if any filename contains trend (also case insensive) 
+
+- Find ==true or == true or ==false or == false or ==TRUE, etc.., the second one will count them
+grep --include \*.cpp -Hrn -i -E '==false|==true|== true|== false|!=true|!= true|!=false|!= false' .
+grep -Hrn -i -E '==false|==true|== true|== false' . 
+grep -Hrn -i -E '==false|==true|== true|== false' . | grep -i -c -E 'true|false'
+
+
+- Find files with tabs in current directory and sub-directories 
+grep -Hrn -P '\t' .
+
+-In current directory and sub-directories find files changed in last 2 minutes:
+find . -cmin -2
+
+- Find lines with more than 80 characters in a line in a single file
+grep -n '.\{80,\}' emc/emc/emc-test/src/dataloggertest.cpp
+
+- Find lines with more than 80 characters in a line in all files in sub-directory 
+grep -Hrn '.\{81,\}' emc/emc/libemc/
+
+- Find recursevily files with gcda extension in current directory
+find . -name "*.gcda" -type f
+
+- Remove recursevily files with gcda extension in current directory
+find . -name "*.gcda" -type f -delete
+
+- Find recursevily files with gcno extension in current directory
+find . -name "*.gcno" -type f
+
+- Remove recursevily files with gcno extension in current directory
+find . -name "*.gcno" -type f -delete
+
+-Get BBB ip address
+(First on BBB modimy /etc/hostname to arm-postry)
+avahi-resolve-host-name arm-postry.local  -4
+
+- Expand BBB SD card to ensure full capacity
+sudo /opt/scripts/tools/grow_partition.sh
+
+- GIT reset your index to HEAD^ (the previous commit) but leave your changes in the staging area.
+  (like undo the commit, revert the commit)
+git reset --soft HEAD^
+
+- Shorten the linux command line prompt
+export PS1='$ '
+
+- Git create diff:
+git diff > yourcoworkers.diff
+git format-patch > yourcoworkers.diff
+The secend one carries information about the authorship. 
+
+- Git apply diff:
+git apply yourcoworkers.diff
+git am yourcoworkers.diff
+The secend one carries information about the authorship.
+
+-Git get the remote repo URL
+git remote show origin
+git remote show origin -n
+
+- List all man pages (all topics)
+man -k .
+
+- Show process command line arguments
+ps -fp <pid>
+cat /proc/<pid>/cmdline
+ps -ww -fp <pid>
+
+- Change daemon command line arguments
+In Debian and Ubuntu, often daemon have some configuration parameters set in /etc/default/daemon-name, this is e.g. /etc/default/ntp.
+
+- Compress/extract directory using tar
+compress:
+tar -czvf --overwrite stage.tar.gz /home/john/proj/workspace/emc-trends-gcc-all/emc/build-arm/stage
+(this will cut path prefix so when extracted it will extract to the current dir)
+tar -czvf --overwrite stage.tar.gz -C /home/john/proj/workspace/emc-curves-gcc-all/emc/build-arm/stage .
+(extract:)
+tar -xzvf stage.tar.gz 
+tar -xzvf stage.tar.gz -C ./stage --overwrite
+
+- Change title of gnome-terminal window / tab.
+In .bashrc add:
+set-title(){
+  ORIG=$PS1
+  TITLE="\e]2;$@\a"
+  PS1=${ORIG}${TITLE}
+}
+set-title "\u@\h:\w\$ [THE APPENDED TITLE]"
+In the terminal type in: 
+set-title "\u@\h:\w\$ [THE TITLE]"
+
+- Use GDB preety print:
+ ./configure --with-python=/usr/bin/python2.7 
+
+ in the gdbinit add:
+python
+import sys
+sys.path.insert(0, '/home/john/tools/gdb_printers/python')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (None)
+end
+
+when run gdb, specify where is the ./data-directory
+ ./gdb -data-directory ./data-directory
+
+
+- Usefull gcc flags:
+ -std=c++11 -Wall --coverage -fprofile-arcs -ftest-coverage
+
+- usefull astyle formater commands
+astyle --style=allman --indent=spaces=4 --align-pointer=type --align-reference=type --keep-one-line-statements --convert-tabs  --max-code-length=80  file.cpp
+
+
+- GDB prity printer
+python
+import sys
+sys.path.insert(0, '/home/john/tools/gdb_printers/python')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (None)
+end
+
+- Go build linking error: /usr/bin/ld: $WORK/b001/pkg2.a(_x004.o): undefined reference to symbol ‘pthread_key_delete@@GLIBC_2.2.5’
+/usr/lib/libpthread.so.0: error adding symbols: DSO missing from command line
+Solved it, for gccgo backend, use go build -gccgoflags "-L /lib64 -l pthread", fo gc backend use go build -ldflags "-L /lib64 -l pthread"

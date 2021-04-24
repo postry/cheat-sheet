@@ -1,0 +1,10 @@
+- optimistic ofline lock
+- RAII
+- composite
+- visitor
+- command
+- facade
+- remote facade
+- singleton
+- factory
+- iterator
