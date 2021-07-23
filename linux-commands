@@ -1,3 +1,6 @@
+Print commits to prepeare release notes.
+  git log --pretty=%s --after=2021.05.10 --oneline
+
 Dump data from UART
   stty -F /dev/ttyO4 raw
   stty -F /dev/ttyO4 460800
