@@ -1,3 +1,12 @@
+Enable code coverage and run lcov:
+ Ensure that the project is built using GCC
+ Add --coverage to compiler and linker flags (for example CFLAGS and LDFLAGS)
+ Compile and run - application must finish without 'killing' in the debugger or cruch.
+ Collect coverage data:
+ lcov --capture --directory project-dir --output-file coverage.info
+ Generate HTML output:
+ genhtml coverage.info --output-directory out
+
 Print commits to prepeare release notes.
   git log --pretty=%s --after=2021.05.10 --oneline
 
