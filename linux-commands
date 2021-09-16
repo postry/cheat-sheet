@@ -1,21 +1,24 @@
-Enable code coverage and run lcov:
- Ensure that the project is built using GCC
- Add --coverage to compiler and linker flags (for example CFLAGS and LDFLAGS)
- Compile and run - application must finish without 'killing' in the debugger or cruch.
- Collect coverage data:
- lcov --capture --directory project-dir --output-file coverage.info
- Generate HTML output:
- genhtml coverage.info --output-directory out
+- Git keep file.ext in repo but ignore local changes.
+git update-index --skip-worktree file.ext
 
-Print commits to prepeare release notes.
+- Enable code coverage and run lcov:
+Ensure that the project is built using GCC
+Add --coverage to compiler and linker flags (for example CFLAGS and LDFLAGS)
+Compile and run - application must finish without 'killing' in the debugger or cruch.
+Collect coverage data:
+lcov --capture --directory project-dir --output-file coverage.info
+Generate HTML output:
+genhtml coverage.info --output-directory out
+
+- Print commits to prepeare release notes.
   git log --pretty=%s --after=2021.05.10 --oneline
 
-Dump data from UART
+- Dump data from UART
   stty -F /dev/ttyO4 raw
   stty -F /dev/ttyO4 460800
   hexdump -C /dev/ttyO4
 
-Virtual com ports on Linux:
+- Virtual com ports on Linux:
 1.
   sudo socat PTY,link=/dev/ttyS10 PTY,link=/dev/ttyS11
   sudo minicom -D /dev/ttyS10
@@ -25,11 +28,11 @@ Virtual com ports on Linux:
   cat < /dev/pts/7
   echo "Test" > /dev/pts/10
   
-Ramdisk:
+- Ramdisk:
 mkdir /mnt/ramdisk
 mount -t tmpfs -o size=512m tmpfs /mnt/ramdisk
 
-MongoDB:
+- MongoDB:
 use bcs
 db.bwcConnections.find()
 db.bwcConnections.remove({"emcId" : "8wmjn6owKQ7sqxcSY"})
