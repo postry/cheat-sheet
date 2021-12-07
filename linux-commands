@@ -1,5 +1,10 @@
+
 - Git keep file.ext in repo but ignore local changes.
 git update-index --skip-worktree file.ext
+or 
+git update-index --assume-unchanged file.ext
+to revert
+git update-index --no-assume-unchanged file.ext
 
 - Enable code coverage and run lcov:
 Ensure that the project is built using GCC
