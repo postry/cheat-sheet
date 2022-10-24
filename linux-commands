@@ -1,3 +1,5 @@
+- erase flash memory using openocd
+openocd -f board/st_nucleo_f4.cfg -c "init" -c "halt" -c "wait_halt" -c "stm32f1x mass_erase 0" -c "sleep 200" -c "reset run" -c "shutdown"
 
 - Git keep file.ext in repo but ignore local changes.
 git update-index --skip-worktree file.ext
