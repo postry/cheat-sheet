@@ -1,0 +1,8 @@
+
+- Install C# coverage tools:
+  dotnet tool install --global dotnet-coverage
+  dotnet tool install --global dotnet-reportgenerator-globaltool
+
+- Run C# application and generate coverage report
+  dotnet-coverage.exe collect  .\MasitekTablet.App.Win.exe --output .\Tests\CodeCoverage --output-format cobertura
+  reportgenerator -reports:.\Tests\CodeCoverage.cobertura.xml -targetdir:".\Tests\CoverageReport" -reporttypes:Html
