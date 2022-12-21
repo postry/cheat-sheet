@@ -40,3 +40,27 @@ FROM [dbo].[AbpUserAccounts] WHERE (IsDeleted = 0) AND (EmailAddress NOT LIKE '%
 GROUP BY [EmailAddress]
 HAVING COUNT(*) > 1
 
+
+-- Lists all clients using tablet version between 2001-2017 who uploaded datruns in 2022.
+-- Counts how many runs each client made
+-- Joins tables tblDataRuns and tblClients to display client name.
+SELECT t1.ClientId, t2.Name, COUNT(*) AS "Times used"
+FROM (SELECT [Id]
+      ,[Key]
+      ,[ClientId]
+      ,[UserId]
+      ,[DeviceId]
+      ,[Name]
+      ,[Notes]
+      ,[FirmwareVersion]
+      ,[TabletVersion]
+      ,[DateDeleted]
+      ,[LocationId]
+      ,[LineId]
+      ,[StartTime]
+      ,[EndTime]
+      ,[DateUploaded]
+      ,[DeleterUserId]
+  FROM [dbo].[tblDataRuns] where TabletVersion > '2000' and TabletVersion < '2018' and [DateUploaded] > '2022-01-01' ) as t1 
+JOIN [dbo].tblClients t2 ON t1.ClientId = t2.Id  
+GROUP BY t2.Name, t1.ClientId ORDER BY "Times used" DESC
