@@ -64,3 +64,17 @@ FROM (SELECT [Id]
   FROM [dbo].[tblDataRuns] where TabletVersion > '2000' and TabletVersion < '2018' and [DateUploaded] > '2022-01-01' ) as t1 
 JOIN [dbo].tblClients t2 ON t1.ClientId = t2.Id  
 GROUP BY t2.Name, t1.ClientId ORDER BY "Times used" DESC
+
+
+-- Join AbpUser and AbpUserUserAccounts wher ID is equal but isDeleted is different.
+-- Then join the result (UserJoinedAccounts) with Tenats where UserJoinedAccounts.TenatId is Tenats.Id.
+SELECT UserJoinedAccounts.*, Tenants.*
+FROM (
+  SELECT AU.IsDeleted AS AbpUsers_IsDeleted, 
+         AUA.IsDeleted AS AbpUserAccounts_IsDeleted, 
+         AUA.*
+  FROM [dbo].[AbpUserAccounts] AUA
+  INNER JOIN [dbo].[AbpUsers] AU ON (AU.Id = AUA.UserId)
+  WHERE AU.IsDeleted != AUA.IsDeleted
+) UserJoinedAccounts
+JOIN [dbo].[AbpTenants] Tenants ON UserJoinedAccounts.TenantId = Tenants.Id ORDER BY TenancyName
