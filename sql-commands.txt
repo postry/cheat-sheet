@@ -89,3 +89,9 @@ ALTER DATABASE [masitek-dev-2023-2-7-10-30] MODIFY NAME = [Masitek_Portal];
 GO  
 ALTER DATABASE [Masitek_Portal] SET MULTI_USER;
 GO
+
+-- Print rows affected by update query
+UPDATE [dbo].[AbpUserAccounts]
+SET EmailAddress = REPLACE(EmailAddress, '''', '')
+OUTPUT deleted.*
+WHERE EmailAddress LIKE '''%';
