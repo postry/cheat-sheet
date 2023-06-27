@@ -95,3 +95,10 @@ UPDATE [dbo].[AbpUserAccounts]
 SET EmailAddress = REPLACE(EmailAddress, '''', '')
 OUTPUT deleted.*
 WHERE EmailAddress LIKE '''%';
+
+-- Add user to DB
+CREATE LOGIN LoginName WITH PASSWORD = '123';
+CREATE USER UserName FOR LOGIN LoginName; CProdWkci2 WITH PASSWORD = 'Iopwn6m_2Zr30*OAz';
+ALTER ROLE db_datareader
+	ADD MEMBER UserName;  
+GO
