@@ -98,7 +98,10 @@ WHERE EmailAddress LIKE '''%';
 
 -- Add user to DB
 CREATE LOGIN LoginName WITH PASSWORD = '123';
-CREATE USER UserName FOR LOGIN LoginName; CProdWkci2 WITH PASSWORD = 'Iopwn6m_2Zr30*OAz';
+CREATE USER UserName FOR LOGIN LoginName;
 ALTER ROLE db_datareader
 	ADD MEMBER UserName;  
 GO
+
+-- Change Login password
+ALTER LOGIN LoginName WITH PASSWORD = 'NewPassword';
