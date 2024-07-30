@@ -1,0 +1,5 @@
+1. Start mobile app with cleaning cache
+npx expo start -c
+
+2. start mobile app on android
+npx expo run:android
