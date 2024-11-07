@@ -105,3 +105,36 @@ GO
 
 -- Change Login password
 ALTER LOGIN LoginName WITH PASSWORD = 'NewPassword';
+
+
+-- Get Min, Average and Max stored bytes of column through all records in table
+SELECT 
+	MIN(DATALENGTH([Name])) AS MinLength, 
+	AVG(DATALENGTH([Name])) AS AvrByteLength,
+	MAX(DATALENGTH([Name])) AS MaxByteLength
+FROM [Masitek_Portal].[dbo].[tblDataRuns];
+
+-- Get Min, Average and Max text length of column through all records in table
+SELECT 
+	MIN(LEN([Name])) AS MinLength, 
+	AVG(LEN([Name])) AS AvrByteLength,
+	MAX(LEN([Name])) AS MaxByteLength
+FROM [Masitek_Portal].[dbo].[tblDataRuns];
+
+-- create a histogram (groupes of 10) of datalength of column [Name] in all records 
+SELECT 
+    FLOOR(DATALENGTH([Name]) / 10) * 10 AS ByteLengthBin,  -- Creating bins of 10 bytes
+    COUNT(*) AS BinCount
+FROM [Masitek_Portal].[dbo].[tblDataRuns]
+GROUP BY FLOOR(DATALENGTH([Name]) / 10) * 10
+ORDER BY ByteLengthBin;
+
+-- create a histogram of character length of column [Name] in all records 
+SELECT 
+    LEN([Name]) AS CharacterLength,   -- Get the character length of Name
+    COUNT(*) AS Frequency              -- Count how many rows have this length
+FROM [Masitek_Portal].[dbo].[tblDataRuns]
+GROUP BY LEN([Name])                   -- Group by character length
+ORDER BY CharacterLength;              -- Order by character length
+
+
