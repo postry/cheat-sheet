@@ -1,0 +1,12 @@
+- Send POST request using curl e.g. sendgrid webhook
+curl -X POST https://abc.de    -H "Content-Type: application/json" -d '[
+  {
+    "email": "example@test.com",
+    "event": "delivered",
+    "timestamp": 1513299569,
+    "sg_event_id": "sendgrid_internal_event_id",
+    "sg_message_id": "message_id",
+    "ip": "127.0.0.1",
+    "useragent": "Mozilla/5.0"
+  }
+]'
