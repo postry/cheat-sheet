@@ -1,0 +1,41 @@
+mcumgr conn add ceusb type="serial" connstring="dev=COM11,baud=115200,mtu=512"
+mcumgr conn add ceusbL type="serial" connstring="dev=COM11,baud=115200,mtu=4096"
+mcumgr conn show
+
+mcumgr -c ceusb image list
+mcumgr -c ceusb image erase
+mcumgr -c ceusb image upload .\zephyr\app_update.bin
+
+
+mcumgr -c ceusbL image list
+mcumgr -c ceusbL image erase
+mcumgr -c ceusbL image upload .\zephyr\app_update.bin
+mcumgr -c ceusbL image upload ..\app_update.bin
+
+ninja partition_manager_report 
+
+flash_map list
+flash read masitek_nand 0 64
+flash erase masitek_nand 0 0x40000
+
+
+
+CONFIG_SINGLE_APPLICATION_SLOT
+CONFIG_BOOT_SWAP_USING_SCRATCH
+CONFIG_PM_EXTERNAL_FLASH_MCUBOOT_SECONDARY
+# No scratch needed - direct swap
+CONFIG_BOOT_SWAP_MOVE=y  
+# Overwrite firmware (no swap)
+CONFIG_BOOT_UPGRADE_ONLY=y
+
+C:\ncs\v2.5.2\nrf\applications\nrf5340_audio\dfu\conf\overlay-mcuboot_external_flash.conf
+# External Flash
+CONFIG_SPI=y
+CONFIG_SPI_NOR=y
+CONFIG_SPI_NOR_SFDP_DEVICETREE=y
+CONFIG_MULTITHREADING=y
+# Change default flash erase size for flexible flash layout
+CONFIG_SPI_NOR_FLASH_LAYOUT_PAGE_SIZE=4096
+CONFIG_BOOT_ERASE_PROGRESSIVELY=y
+CONFIG_SOC_FLASH_NRF_EMULATE_ONE_BYTE_WRITE_ACCESS=y
+CONFIG_FPROTECT=y
