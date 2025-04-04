@@ -1,0 +1,4 @@
+- AWS API gateway can modify headers e.g. 'App-Type' can be modified to 'app-type' - in authorizer make sure code is not case sensitive.
+- When deploy API gateway locally, when authorizer throws error 'unauthorized' (expected code 401) the gateway will return 403. It works correctly when deployed to AWS.
+- When filling CORS headers in AWS lambda, they will only work for 200 codes. CORS for 40x and 50x need to be configured in templaye.yaml seperately.
+- If it is not explicitly specified the cookies are session only, they will be cleared after browser is closed. So if the cookie contains token, it will not be there and user will need to login again.
