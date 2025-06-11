@@ -1,0 +1,5 @@
+- Configure aws SSO (it will create profile e.g. MasitekAdmin)
+aws configure sso
+
+- Login aws cli
+aws sso login --profile MasitekAdmin
