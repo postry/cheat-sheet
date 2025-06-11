@@ -1,0 +1,2 @@
+- Install and run postman to opanAPI
+npx --yes postman-to-openapi@latest my-collection.json -o openapi.yaml
