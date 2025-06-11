@@ -1,0 +1,16 @@
+- Configure Linux filesystem watch events (otherwise API may not start)
+sudo sysctl fs.inotify.max_user_watches=524288
+sudo sysctl fs.inotify.max_user_instances=512
+
+- Kill all containers
+sudo su
+docker kill $(docker ps -q)
+
+- Create DB tunnel conenction (listen on all local interfaces on port 5434 and forward to 5432)
+ssh -4 -L 0.0.0.0:5434:database.amazonaws.com:5432 ec2-user@virtualmachine.amazonaws.com -i .ssh/id_ed25519 -v
+
+- Build
+sam build -no-cached
+
+- Start local API
+sam local start-api --profile MasitekAdmin --ssl-cert-file ./certs/cert.pem --ssl-key-file ./certs/key.pem
