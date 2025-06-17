@@ -138,3 +138,10 @@ GROUP BY LEN([Name])                   -- Group by character length
 ORDER BY CharacterLength;              -- Order by character length
 
 
+pg cli:
+- create backup (ssh tunnel on port 5434)
+pg_dump -U jahulas -h localhost -p 5434 -F c -b -v -f portal.backup portal
+
+-restore db
+pg_restore -U postgres -h localhost -p 5433 -d portal -v portal.backup
+
