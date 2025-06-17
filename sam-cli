@@ -9,6 +9,9 @@ docker kill $(docker ps -q)
 - Create DB tunnel conenction (listen on all local interfaces on port 5434 and forward to 5432)
 ssh -4 -L 0.0.0.0:5434:database.amazonaws.com:5432 ec2-user@virtualmachine.amazonaws.com -i .ssh/id_ed25519 -v
 
+- To connect to local DB - create tunnel - otherwise the database ios not seen from docker
+ssh -4 -L 0.0.0.0:5434:localhost:5433 masitek@localhost -v
+
 - Build
 sam build -no-cached
 
