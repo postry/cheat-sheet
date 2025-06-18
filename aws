@@ -13,3 +13,9 @@ aws s3api list-multipart-uploads --bucket dataruns-upload --profile MasitekAdmin
 - Abort multipart upload
 aws s3api abort-multipart-upload --bucket dataruns-upload --profile MasitekAdmin  --key "dataruns/abc123/myfile.dat" --upload-id "6bHH2llKRmvla.1W6uJkePKTyeAqaU6Vzdk8LE1vzPF5piF.woOyp3c9ccJlQG_xqkebMxRaJN1agZ4MjN7USeQ_1x5ctzeLvvZ3ZTzPiVhQCmqbNc8v7w6myUQUQNrHGROYImEXfm7aK90IAvH21A--"
 
+- List DNS hosted zones
+aws route53 list-hosted-zones --profile MasitekAdmin
+
+- Get DNS records for specific zone
+aws --profile MasitekAdmin route53 list-resource-record-sets --hosted-zone-id /hostedzone/Z716263634843
+
