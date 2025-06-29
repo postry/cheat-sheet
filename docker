@@ -1,5 +1,5 @@
 - Start docker service 
 sudo systemctl docker start
 
-- Add user to docker group (e.g. required for sam local start-api) 
+- Add user to docker group (e.g. required for sam local start-api), requires system reset or logout/login 
 sudo usermod -aG docker $USER
