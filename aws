@@ -7,6 +7,12 @@ aws sso login --profile MasitekAdmin
 - List s3 buckets
 aws s3 ls --profile MasitekAdmin
 
+- Create bucket cracklessegg
+aws s3api create-bucket --bucket cracklessegg --region us-east-1 --profile MasitekAdmin
+
+- Download object 'cracklessegg/company-1...csv' and print to sdtout ('-' in the command line)
+aws s3 cp s3://cracklessegg/company-1/user-103/exports/data/425-20250708T203422Z.csv - --profile MasitekAdmin
+
 - List multipart uploads
 aws s3api list-multipart-uploads --bucket dataruns-upload --profile MasitekAdmin
 
