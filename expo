@@ -1,0 +1,6 @@
+
+- Run the app on android phone
+npx expo run:android
+
+- Reload .env file
+npx expo start --dev-client --clear
