@@ -2,3 +2,5 @@
 - When deploy API gateway locally, when authorizer throws error 'unauthorized' (expected code 401) the gateway will return 403. It works correctly when deployed to AWS.
 - When filling CORS headers in AWS lambda, they will only work for 200 codes. CORS for 40x and 50x need to be configured in templaye.yaml seperately.
 - If it is not explicitly specified the cookies are session only, they will be cleared after browser is closed. So if the cookie contains token, it will not be there and user will need to login again.
+- Lambda memory limit is 6MB for synchronous and 256KB for asynchronouse. Where synchronous is when API Gateway waits for the function to complete and then returns its response and status code. And asynchronous is API gateway return 202 -Accepted immidietly and fire and rorget Lambda.
+- REST API gateway has limitation of 10 MB, however when send binary data e.g. appliction/octetstream the payload is base64 encoded and even 5MB of fata grows to 6.5MB which exceds the 6MB of Lambda limit.
