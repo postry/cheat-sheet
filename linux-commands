@@ -326,3 +326,6 @@ end
 - Go build linking error: /usr/bin/ld: $WORK/b001/pkg2.a(_x004.o): undefined reference to symbol ‘pthread_key_delete@@GLIBC_2.2.5’
 /usr/lib/libpthread.so.0: error adding symbols: DSO missing from command line
 Solved it, for gccgo backend, use go build -gccgoflags "-L /lib64 -l pthread", fo gc backend use go build -ldflags "-L /lib64 -l pthread"
+
+- Git diff between branchs on a specific file only.
+git diff <branch1> <branch2> -- <file_path>
