@@ -329,3 +329,6 @@ Solved it, for gccgo backend, use go build -gccgoflags "-L /lib64 -l pthread", f
 
 - Git diff between branchs on a specific file only.
 git diff <branch1> <branch2> -- <file_path>
+
+- How do I modify git commit message (last commit)
+git commit --amend
