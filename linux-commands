@@ -1,3 +1,17 @@
+- Read external flash using nrfjprog
+nrfjprog --readqspi ./qspi.bin --qspiini ./config.toml -c 40000
+
+- Mount LittleFS image (from external flash) on Linux
+git clone git@github.com:littlefs-project/littlefs-fuse.git
+sudo apt-get install libfuse-dev
+make DEBUG=1 clean all 
+# find next available loop device
+losetup -f 
+losetup /dev/loop40 ./qspi.bin
+mkdir mount
+./lfs --block_count=28672  --block_size=4096  /dev/loop40 mount/
+./lfs --block_count=28672  --block_size=4096  --stat  /dev/loop40
+
 - erase flash memory using openocd
 openocd -f board/st_nucleo_f4.cfg -c "init" -c "halt" -c "wait_halt" -c "stm32f1x mass_erase 0" -c "sleep 200" -c "reset run" -c "shutdown"
 
