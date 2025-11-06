@@ -139,8 +139,11 @@ ORDER BY CharacterLength;              -- Order by character length
 
 
 pg cli:
+formatted_timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 - create backup (ssh tunnel on port 5434)
 pg_dump -U jahulas -h localhost -p 5434 -F c -b -v -f portal.backup portal
+pg_dump -U jahulas -h localhost -p 5434 -F c -b -v -f portal.$formatted_timestamp.backup portal
+
 
 -restore db
 pg_restore -U postgres -h localhost -p 5433 -d portal -v portal.backup
