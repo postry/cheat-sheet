@@ -4,4 +4,4 @@
 - If it is not explicitly specified the cookies are session only, they will be cleared after browser is closed. So if the cookie contains token, it will not be there and user will need to login again.
 - Lambda memory limit is 6MB for synchronous and 256KB for asynchronouse. Where synchronous is when API Gateway waits for the function to complete and then returns its response and status code. And asynchronous is API gateway return 202 -Accepted immidietly and fire and rorget Lambda.
 - REST API gateway has limitation of 10 MB, however when send binary data e.g. appliction/octetstream the payload is base64 encoded and even 5MB of fata grows to 6.5MB which exceds the 6MB of Lambda limit.
-- When deploy API sometimes the authorizer caching swith to 'ON', that is causing 403 errors. After change the setting to enable, save, disable, save than deploy the api from the web browser.
+- When deploy API sometimes the authorizer caching swith to 'ON', that is causing 403 errors. After change the setting to enable, save, disable, save than deploy the api from the web browser (in the API click Deploy button and select the staging slot).
