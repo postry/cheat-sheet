@@ -1,0 +1,4 @@
+1. key arguments by default are not required. To enforce key argument in function invocation a 'required' key word in front of parameter needed e.g. void method({required this.colors})
+2. when a constant variable wil be initialised dynamically but the value is not yet known than that variable can be marked as final instead of const.
+3. Theese 2 constructors can be used replaceble:
+GradientContainer({super.key}); <=> GradientContainer({key}) : super(key: key) {}
