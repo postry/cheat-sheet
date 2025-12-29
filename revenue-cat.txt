@@ -1,0 +1,7 @@
+1. RevenueCat will not work if the package name is different than in the app in revenue cat dashboard. So if app1 in RC is configured than app 2 can not just use the RC SDK with app 1 API Key (e.g. a simpler test app)- it will not work.
+2. To test Revenue Cat direct API call can be made e.g. 
+curl -X GET   "https://api.revenuecat.com/v1/subscribers/\$RCAnonymousID:fed61cc59f8a4fa29a889788787d9bcc/offerings"   -H "Authorization: Bearer API_KEY_GOESHERE"   -H "X-Platform: android"   -H "Content-Type: application/json" | jq
+3. Need change in MainActivity.kt:
+  package com.example.rcatyb
+  import io.flutter.embedding.android.FlutterFragmentActivity
+  class MainActivity : FlutterFragmentActivity()
