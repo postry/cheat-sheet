@@ -1,0 +1,11 @@
+- Find commits that are on branch develop and release since the last release or in this case since commit number 9711935 
+git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop release/1.0.3  --not 9711935
+
+- Find commits that are on develop and did niot make it to release:
+git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop --not release/1.0.3
+
+- To create release notes use combination of both commands to exclude what was on develop but not on release
+git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop release/1.0.3  --not 9711935
+git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop --not release/1.0.3
+
+
