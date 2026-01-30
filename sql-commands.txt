@@ -138,6 +138,7 @@ GROUP BY LEN([Name])                   -- Group by character length
 ORDER BY CharacterLength;              -- Order by character length
 
 
+-- Create a SSH tunnel 
 pg cli:
 formatted_timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 - create backup (ssh tunnel on port 5434)
@@ -147,4 +148,36 @@ pg_dump -U jahulas -h localhost -p 5434 -F c -b -v -f portal.$formatted_timestam
 
 -restore db
 pg_restore -U postgres -h localhost -p 5433 -d portal -v portal.backup
+
+
+-- cleanup DATABASE
+BEGIN;
+
+-- Delete in dependency order
+DELETE FROM device_types;
+DELETE FROM data_wide;
+DELETE FROM datarun_images;
+DELETE FROM datarun_videos;
+DELETE FROM datarun_notes;
+DELETE FROM datarun_zones;
+DELETE FROM data_runs;
+DELETE FROM beacons;
+DELETE FROM device_inputs;
+DELETE FROM device_zones;
+DELETE FROM devices;
+DELETE FROM lines;
+DELETE FROM facilities;
+DELETE FROM licenses;
+DELETE FROM user_preferences;
+DELETE FROM user_profiles;
+DELETE FROM users;
+DELETE FROM companies;
+
+-- Optional: Reset sequences (uncomment if needed)
+-- ALTER SEQUENCE beacons_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE companies_id_seq RESTART WITH 1;
+-- ... (add other sequences as needed)
+
+COMMIT;
+-- Use ROLLBACK; instead if you want to test first
 
