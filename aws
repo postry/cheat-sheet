@@ -25,3 +25,6 @@ aws route53 list-hosted-zones --profile MasitekAdmin
 - Get DNS records for specific zone
 aws --profile MasitekAdmin route53 list-resource-record-sets --hosted-zone-id /hostedzone/Z716263634843
 
+- List all VPCs
+aws ec2 describe-vpcs     --query "Vpcs[*].[VpcId,Tags[?Key=='Name'].Value | [0]]"     --output table --profile MasitekAdmin
+
