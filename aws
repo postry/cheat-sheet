@@ -33,3 +33,24 @@ aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-07b9b2264ee81b
 
 - List all DBs with connection endpoint and port
 aws rds describe-db-instances --query "DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port,Engine]" --output table --profile MasitekAdmin
+
+- List all proxies with connection endpoints (proxy and target DB)
+ PROFILE=MasitekAdmin
+
+# List proxies with their connection endpoints and target DBs with ports
+for proxy in $(aws rds describe-db-proxies --profile $PROFILE --query "DBProxies[*].DBProxyName" --output text); do
+    # Get the proxy connection endpoint
+    proxy_endpoint=$(aws rds describe-db-proxies --profile $PROFILE \
+        --db-proxy-name $proxy --query "DBProxies[0].Endpoint" --output text)
+    
+    echo "Proxy: $proxy"
+    echo "Proxy Endpoint: $proxy_endpoint"
+    
+    # List the target DB instances with role, endpoint, and port
+    aws rds describe-db-proxy-targets --profile $PROFILE --db-proxy-name $proxy \
+        --query "Targets[*].[DBInstanceIdentifier,TargetRole,Endpoint,Port]" \
+        --output table
+
+    echo "----------------------------------------"
+done
+
