@@ -28,3 +28,5 @@ aws --profile MasitekAdmin route53 list-resource-record-sets --hosted-zone-id /h
 - List all VPCs
 aws ec2 describe-vpcs     --query "Vpcs[*].[VpcId,Tags[?Key=='Name'].Value | [0]]"     --output table --profile MasitekAdmin
 
+- List all Security Groups in VPC
+aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-07b9b2264ee81b9c0 --query "SecurityGroups[*].[GroupId,GroupName]" --output table --profile MasitekAdmin
