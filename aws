@@ -30,3 +30,6 @@ aws ec2 describe-vpcs     --query "Vpcs[*].[VpcId,Tags[?Key=='Name'].Value | [0]
 
 - List all Security Groups in VPC
 aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-07b9b2264ee81b9c0 --query "SecurityGroups[*].[GroupId,GroupName]" --output table --profile MasitekAdmin
+
+- List all DBs with connection endpoint and port
+aws rds describe-db-instances --query "DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port,Engine]" --output table --profile MasitekAdmin
