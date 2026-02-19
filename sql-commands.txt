@@ -139,6 +139,8 @@ ORDER BY CharacterLength;              -- Order by character length
 
 
 -- Create a SSH tunnel 
+ssh -L 0.0.0.0:5434:remotedb.amazonaws.com:5432 ec2-user@ec2instance.amazonaws.com -i ~/.ssh/id_ed25519 -v
+
 pg cli:
 formatted_timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 - create backup (ssh tunnel on port 5434)
