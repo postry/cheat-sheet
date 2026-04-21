@@ -183,3 +183,43 @@ DELETE FROM companies;
 COMMIT;
 -- Use ROLLBACK; instead if you want to test first
 
+
+
+--------------------------------------------
+-- Truncate tables and restart sequences
+BEGIN;
+
+-- Safety check (recommended)
+DO $$
+BEGIN
+  IF current_database() <> 'smartspud' THEN
+    RAISE EXCEPTION 'Wrong database!';
+  END IF;
+END $$;
+
+-- FULL WIPE (this is the key fix)
+TRUNCATE TABLE
+  device_types,
+  data_wide,
+  datarun_images,
+  datarun_videos,
+  datarun_notes,
+  datarun_zones,
+  data_runs,
+  beacons,
+  device_inputs,
+  device_zones,
+  devices,
+  lines,
+  facilities,
+  licenses,
+  user_preferences,
+  user_profiles,
+  users,
+  companies
+RESTART IDENTITY CASCADE;
+
+COMMIT;
+
+
+
