@@ -8,4 +8,7 @@ git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop --not release/
 git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop release/1.0.3  --not 9711935
 git log --pretty=format:"%h - %s (%an, %ad)" --date=short develop --not release/1.0.3
 
+- Test github action
+act push -W .github/workflows/deploy-dev.yml   -s AWS_ACCESS_KEY_ID="AAAA"   -s AWS_SECRET_ACCESS_KEY="BBB"   -s AWS_SESSION_TOKEN="CCC"
+
 
