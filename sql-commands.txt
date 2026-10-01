@@ -221,5 +221,25 @@ RESTART IDENTITY CASCADE;
 
 COMMIT;
 
+-- List all clients that use system in date range. Display client name, number of uploads, target system
+SELECT 
+    c.Id            AS ClientId,
+    c.Name          AS ClientName,
+    ts.Name         AS TargetSystem,
+    COUNT(*)        AS [Times used]
+FROM dbo.tblDataRuns AS r
+JOIN dbo.tblClients AS c 
+    ON r.ClientId = c.Id
+LEFT JOIN dbo.tblDevices AS d 
+    ON r.DeviceId = d.Id
+LEFT JOIN dbo.PhysicalDevice AS pd 
+    ON d.[Key] = pd.Id
+LEFT JOIN dbo.TargetSystem AS ts 
+    ON pd.TargetSystem = ts.Id
+WHERE r.DateUploaded >= '20260101'
+  AND r.DateUploaded <  '20270101'
+  AND r.DateDeleted IS NULL          -- remove if you want deleted runs counted
+GROUP BY c.Id, c.Name, ts.Name
+ORDER BY [Times used] DESC;
 
 
