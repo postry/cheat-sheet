@@ -267,3 +267,13 @@ WHERE r.DateUploaded >= '20250101'
   AND r.DateDeleted IS NULL          -- remove if you want deleted runs counted
 GROUP BY c.Id, c.Name, ts.Name, dt.Name
 ORDER BY c.Name, [Times used] DESC;
+
+
+--  Count datarun uploads for each client in date range (new portal)
+SELECT c.id, c.name, COUNT(*) as times_used 
+FROM data_runs as dr
+JOIN companies as c 
+ON dr.company_id = c.id 
+WHERE dr.start_time >= '20250101' and dr.start_time < '20260101'
+GROUP BY c.id, c."name"
+ORDER BY times_used DESC;
