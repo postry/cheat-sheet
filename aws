@@ -54,3 +54,13 @@ for proxy in $(aws rds describe-db-proxies --profile $PROFILE --query "DBProxies
     echo "----------------------------------------"
 done
 
+- List all almbda functions with provisioned concurency enabled
+for fn in $(aws lambda list-functions --profile MasitekAdmin \
+    --query 'Functions[].FunctionName' --output text); do
+  out=$(aws lambda list-provisioned-concurrency-configs \
+    --function-name "$fn" --profile MasitekAdmin \
+    --query 'ProvisionedConcurrencyConfigs[].[FunctionArn,RequestedProvisionedConcurrentExecutions,Status]' \
+    --output text)
+  [ -n "$out" ] && echo "$out"
+done
+
