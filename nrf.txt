@@ -1,3 +1,43 @@
+-- read external flash 
+nrfutil device --x-ext-mem-config-file qspi-w25q01.json   read --address 0x10000000   --serial-number 602003790 --to-file ./data.hex --bytes 134217728 --log-level off --json --swd-clock-frequency 15000  --width 32
+WHERE:
+qspi-w25q01.json
+{
+  "firmware_config": {
+    "peripheral": "QSPI",
+    "compress": true
+  },
+  "pins": {
+    "sck": 17,
+    "csn": 18,
+    "io0": 13,
+    "io1": 14,
+    "io2": 15,
+    "io3": 16
+  },
+  "flash_size": 134217728,
+  "page_size": 4096,
+  "sck_frequency": 8000000,
+  "address_mode": "MODE32BIT",
+  "readoc": "READ4IO",
+  "writeoc": "PP4IO",
+  "pp_size": "PPSIZE256",
+  "sck_delay": 1,
+  "rx_delay": 7
+}
+
+-- convert HEX file to BIN file
+objcopy -I ihex -O binary data.hex data.bin
+
+-- verify LFS on flash image (bin file)
+lfs   --block_size=4096   --block_count=28672   --read_size=16   --prog_size=16   --cache_size=64   --lookahead_size=32   --stat data.bin
+
+-- create loop device
+sudo losetup --find --show --read-only data.bin
+
+
+
+
 mcumgr conn add ceusb type="serial" connstring="dev=COM11,baud=115200,mtu=512"
 mcumgr conn add ceusbL type="serial" connstring="dev=COM11,baud=115200,mtu=4096"
 mcumgr conn show
