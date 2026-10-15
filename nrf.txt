@@ -46,6 +46,10 @@ objcopy -I binary -O ihex --change-addresses 0x10000000 data.bin lfs.hex
 -- write flash image to external QSPI memory
 nrfutil device  --x-ext-mem-config-file qspi-w25q01.json   program --firmware lfs.hex --serial-number 602003790 --options chip_erase_mode=ERASE_ALL,qspi_erase_mode=ERASE_ALL,verify=VERIFY_READ,reset=RESET_SYSTEM
 
+-- erase external memory (around 2m 20s)
+nrfutil device  --x-ext-mem-config-file qspi-w25q01.json  erase --all-external --serial-number 602003790 --swd-clock-frequency 15000
+
+
 mcumgr conn add ceusb type="serial" connstring="dev=COM11,baud=115200,mtu=512"
 mcumgr conn add ceusbL type="serial" connstring="dev=COM11,baud=115200,mtu=4096"
 mcumgr conn show
