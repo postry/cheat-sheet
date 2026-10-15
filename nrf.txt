@@ -33,10 +33,19 @@ objcopy -I ihex -O binary data.hex data.bin
 lfs   --block_size=4096   --block_count=28672   --read_size=16   --prog_size=16   --cache_size=64   --lookahead_size=32   --stat data.bin
 
 -- create loop device
+sudo losetup --find --show data.bin 
+-- or read only
 sudo losetup --find --show --read-only data.bin
 
 -- mount LFS image
 sudo /home/masitek/bin/lfs  --block_count=28672  --block_size=4096   /dev/loop63 ./mount
+
+-- Convert BIN file to HEX 
+objcopy -I binary -O ihex --change-addresses 0x10000000 data.bin lfs.hex
+
+-- write flash image to external QSPI memory
+nrfutil device  --x-ext-mem-config-file qspi-w25q01.json program --firmware lfs.hex --serial-number 602003790
+
 
 mcumgr conn add ceusb type="serial" connstring="dev=COM11,baud=115200,mtu=512"
 mcumgr conn add ceusbL type="serial" connstring="dev=COM11,baud=115200,mtu=4096"
