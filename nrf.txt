@@ -20,7 +20,7 @@ qspi-w25q01.json
   "sck_frequency": 8000000,
   "address_mode": "MODE32BIT",
   "readoc": "READ4IO",
-  "writeoc": "PP4IO",
+  "writeoc": "PP4O",
   "pp_size": "PPSIZE256",
   "sck_delay": 1,
   "rx_delay": 7
